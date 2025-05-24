@@ -51,10 +51,38 @@ When using `slots=True`, subclasses must also define `__slots__` if they introdu
    While `slots` improve memory efficiency and attribute access speed, they restrict dynamic attribute assignment and can complicate inheritance if not managed carefully.
 
 
-    def __enter__(self):
-        self.start = time.time()
-        return self
 
-    def __exit__(self, *args):
-        self.end = time.time()
-        self.duration = self.end - self.start
+---
+
+## 2. Static Methods vs Class Methods
+
+### Differences Between `@staticmethod` and `@classmethod`
+
+- **`@staticmethod`**: Defines a method that does not access or modify class or instance state. It behaves like a regular function but resides within the class's namespace.
+
+- **`@classmethod`**: Receives the class (`cls`) as the first argument and can access or modify class state. It is often used for factory methods that instantiate the class in different ways. :contentReference[oaicite:1]{index=1}
+
+### Method Access Patterns
+
+- **Static Method**: Called on the class or instance without any reference to the class or instance itself.
+
+- **Class Method**: Called on the class or instance, with the class passed as the first argument.
+
+### Inheritance Behavior
+
+Class methods are polymorphic and respect inheritance hierarchies, meaning they can be overridden by subclasses. Static methods do not have this behavior since they do not receive any reference to the class.
+
+### Use Cases
+
+- **Static Methods**: Utility functions related to the class but not dependent on class or instance state.
+
+- **Class Methods**: Alternative constructors or methods that need to access or modify class-level data.
+
+### Design Implications
+
+Choosing between static and class methods depends on whether the method needs to interact with class state. Using the appropriate decorator enhances code clarity and maintainability.
+
+---
+
+
+

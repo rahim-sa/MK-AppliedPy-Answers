@@ -268,4 +268,32 @@ Fixtures with narrower scopes provide better isolation, ensuring that tests do n
 
 ---
 
+## 4. Property Decorators
+Property decorators in Python provide a way to implement getter, setter, and deleter methods for class attributes while maintaining a clean interface. They're part of Python's approach to encapsulation and data validation.
+
+### Types of Property Decorators
+
+- **`@property`**: Defines a getter method, allowing attribute access.
+
+- **`@<property>.setter`**: Defines a setter method, allowing attribute assignment.
+
+- **`@<property>.deleter`**: Defines a deleter method, allowing attribute deletion. :contentReference[oaicite:3]{index=3}
+
+### Encapsulation Patterns
+
+Property decorators enable encapsulation by allowing controlled access to private attributes, facilitating validation and computation upon access or assignment.
+
+### Validation Strategies
+
+Setters can include validation logic to ensure that only appropriate values are assigned to attributes, enhancing data integrity.
+
+### Computed Properties
+
+Properties can compute values dynamically, providing a way to present derived data as attributes without storing them explicitly.
+
+### Property Inheritance
+
+Properties are inherited like regular methods. Subclasses can override property methods to change behavior while maintaining the interface.
+
+---
 

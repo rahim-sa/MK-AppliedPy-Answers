@@ -95,6 +95,17 @@ When using `slots=True`, subclasses must also define `__slots__` if they introdu
 
 - **`@classmethod`**: Receives the class (`cls`) as the first argument and can access or modify class state. It is often used for factory methods that instantiate the class in different ways. :contentReference[oaicite:1]{index=1}
 
+### Key Differences
+
+| Feature               | `@staticmethod`                          | `@classmethod`                           |
+|-----------------------|------------------------------------------|------------------------------------------|
+| **Access to state**   | ❌ No access to class/instance           | ✅ Can access/modify class state via `cls` |
+| **First parameter**   | None (just regular args)                 | `cls` (class reference)                  |
+| **Inheritance**       | Static (no polymorphic behavior)         | Dynamic (respects subclass overrides)    |
+| **Typical Use Case**  | • Pure utility functions<br>• Stateless helpers | • Factory methods<br>• Class configurators |
+| **Callable On**       | Class or instance (`Math.add()` or `m.add()`) | Class only (`Math.factory()`)           |
+
+
 ### Method Access Patterns
 
 - **Static Method**: Called on the class or instance without any reference to the class or instance itself.
@@ -105,6 +116,7 @@ When using `slots=True`, subclasses must also define `__slots__` if they introdu
 
 Class methods are polymorphic and respect inheritance hierarchies, meaning they can be overridden by subclasses. Static methods do not have this behavior since they do not receive any reference to the class.
 
+#### Why Use Static & Class Methods?
 ### Use Cases
 
 - **Static Methods**: Utility functions related to the class but not dependent on class or instance state.
@@ -114,6 +126,28 @@ Class methods are polymorphic and respect inheritance hierarchies, meaning they 
 ### Design Implications
 
 Choosing between static and class methods depends on whether the method needs to interact with class state. Using the appropriate decorator enhances code clarity and maintainability.
+
+
+
+#### When to Use @staticmethod
+
+✅ Utility functions (no need for self/cls):
+
+    Example: MathUtils.add(), DateValidator.is_valid()
+    ✅ Better code organization (keeps related functions in a class).
+    ✅ Slightly faster than instance methods (no self overhead).
+
+#### When to Use @classmethod
+
+✅ Factory methods (alternative constructors):
+
+    Example: BankAccount.from_json(), Person.from_birth_year()
+    ✅ Class-level state modification:
+
+    Example: Updating a shared config (Database.set_config()).
+    ✅ Polymorphism in inheritance:
+
+    cls refers to the subclass, allowing flexible overrides.
 
 ---
 

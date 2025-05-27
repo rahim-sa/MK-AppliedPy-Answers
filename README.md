@@ -275,9 +275,58 @@ Property decorators in Python provide a way to implement getter, setter, and del
 
 - **`@property`**: Defines a getter method, allowing attribute access.
 
+  **Purpose**: Creates a read-only property or computes a value dynamically
+
+    #### Use cases:
+    - Computed properties (values derived from other attributes)
+    - Read-only attributes
+    - Encapsulating internal representation
+    - Adding validation when getting a value
+  
+
 - **`@<property>.setter`**: Defines a setter method, allowing attribute assignment.
+ 
+  **Purpose**: Allows controlled modification of an attribute
+
+    #### Use cases:
+    - Validation before setting a value
+    - Maintaining data consistency
+    - Triggering side effects when values change
+      
 
 - **`@<property>.deleter`**: Defines a deleter method, allowing attribute deletion. :contentReference[oaicite:3]{index=3}
+ 
+  **Purpose**: Controls what happens when an attribute is deleted
+
+    #### Use cases:
+    - Cleanup operations
+    - Preventing deletion of critical attributes
+    - Implementing special deletion behavior
+
+
+#### Example Combining All Three:
+```python
+class BankAccount:
+    def __init__(self, balance):
+        self._balance = balance  # Internal storage (convention: underscore = "private")
+
+    @property
+    def balance(self):  # Getter: Controls read access
+        print("Accessing balance...")  # Optional logging
+        return self._balance  # Returns the stored value
+
+    @balance.setter
+    def balance(self, value):  # Setter: Controls write access
+        if value < 0:  # Validation: Prevent negative balance
+            raise ValueError("Balance cannot be negative!")
+        print(f"Updating balance to ${value}")  # Optional logging
+        self._balance = value  # Updates the stored value
+
+    @balance.deleter
+    def balance(self):  # Deleter: Controls deletion
+        print("Resetting balance to zero!")  # Optional logging
+        self._balance = 0  # Resets balance instead of deleting
+```
 
 ### Encapsulation Patterns
 
@@ -296,4 +345,3 @@ Properties can compute values dynamically, providing a way to present derived da
 Properties are inherited like regular methods. Subclasses can override property methods to change behavior while maintaining the interface.
 
 ---
-

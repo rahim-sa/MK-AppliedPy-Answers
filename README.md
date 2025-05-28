@@ -379,3 +379,81 @@ Properties can compute values dynamically, providing a way to present derived da
 Properties are inherited like regular methods. Subclasses can override property methods to change behavior while maintaining the interface.
 
 ---
+
+## 5. JSON Serialization
+
+#### What is JSON Serialization?
+
+JSON Serialization is the process of converting a data structure (like an object, dictionary, array, or list) into a JSON (JavaScript Object Notation) string. This allows the data to be easily stored, transmitted, or shared between systems.
+
+The reverse process (deserialization) converts a JSON string back into a usable data structure.
+
+#### Why is JSON Serialization Used?
+
+    Data Exchange – JSON is a lightweight, text-based format used in APIs (REST, GraphQL) and web services.
+
+    Storage – Serialized JSON can be saved in databases or files.
+
+    Cross-Language Compatibility – Almost all programming languages support JSON parsing.
+
+### Handling Custom Object Serialization
+
+Python's `json` module does not natively support serializing custom objects. To handle this, you can:
+
+- **Custom Encoder**: Subclass `json.JSONEncoder` and override the `default` method to convert custom objects into serializable formats.
+
+- **Custom Decoder**: Use the `object_hook` parameter in `json.loads` to define how JSON objects are converted back into custom Python objects.
+
+### Complex Object Handling
+
+For complex objects, define a method (e.g., `to_dict`) that returns a serializable representation. Use this method within the custom encoder to handle serialization.
+
+### Circular References
+
+The `json` module cannot handle circular references and will raise a `RecursionError`. To manage this, you can:
+
+- Avoid circular references in your data structures.
+
+- Use third-party libraries like `jsonpickle` that can handle circular references.
+
+- Implement custom logic in your encoder to detect and handle circular references. :contentReference[oaicite:4]{index=4}
+
+### Performance Considerations
+
+Serialization performance can be improved by:
+
+- Using faster third-party libraries like `ujson` or `orjson`.
+
+- Avoiding unnecessary serialization of large or complex objects.
+
+- Caching serialized representations if the same data is serialized multiple times.
+
+---
+
+## 6. Type Hints and Generics
+
+### Use of Generic Types and `TypeVar`
+
+Generics allow you to write flexible and reusable code by parameterizing types. `TypeVar` is used to define a generic type variable, enabling functions and classes to operate on different types while maintaining type safety.
+
+### Generic Type Patterns
+
+Common patterns include:
+
+- **Generic Classes**: Classes that can operate on different types, such as a `Stack[T]` that can hold elements of any type `T`.
+
+- **Generic Functions**: Functions that can accept and return values of generic types.
+
+### Type Constraints
+
+You can constrain `TypeVar` to specific types using the `bound` parameter, ensuring that only subclasses of a particular type are allowed. :contentReference[oaicite:5]{index=5}
+
+### Collection Types
+
+Generics are particularly useful with collection types, allowing you to specify the type of elements within lists, dictionaries, etc., enhancing type checking and code clarity.
+
+### Bounded Types
+
+Bounded `TypeVar` ensures that the generic type adheres to a specific interface or base class, enabling more precise type checking and preventing misuse.
+
+---

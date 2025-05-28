@@ -432,6 +432,14 @@ Serialization performance can be improved by:
 
 ## 6. Type Hints and Generics
 
+Type hints (also called type annotations) allow you to explicitly specify the expected types of variables, function parameters, and return values.
+    
+ - Type hints = Labels for types (str, int, etc.).
+
+ - Optional/Union/Literal = Special cases ("or None", "either A or B", etc.).
+
+ - Generics = A way to reuse type-safe code for different types (List[T], Dict[K, V]). Generics don’t replace other type hints—they make them more powerful!
+
 ### Use of Generic Types and `TypeVar`
 
 Generics allow you to write flexible and reusable code by parameterizing types. `TypeVar` is used to define a generic type variable, enabling functions and classes to operate on different types while maintaining type safety.
@@ -455,5 +463,30 @@ Generics are particularly useful with collection types, allowing you to specify 
 ### Bounded Types
 
 Bounded `TypeVar` ensures that the generic type adheres to a specific interface or base class, enabling more precise type checking and preventing misuse.
+
+ 
+
+ #### Generic Type Example: A Reusable Container
+
+```python
+from typing import Generic, TypeVar, List
+
+# 1. Define a generic type placeholder 'T'
+T = TypeVar('T')
+
+class Container(Generic[T]):
+    """A type-safe container that works with any data type."""
+    
+    def __init__(self, value: T):
+        self.value = value
+    
+    def get_value(self) -> T:
+        """Retrieves the stored value with correct type."""
+        return self.value
+
+# 2. Generic function example
+def get_first(items: List[T]) -> T:
+    """Returns the first item from a list while preserving its type."""
+    return items[0]
 
 ---

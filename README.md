@@ -360,7 +360,7 @@ class BankAccount:
     def balance(self):  # Deleter: Controls deletion
         print("Resetting balance to zero!")  # Optional logging
         self._balance = 0  # Resets balance instead of deleting
-```
+ ```
 
 ### Encapsulation Patterns
 
@@ -465,28 +465,105 @@ Generics are particularly useful with collection types, allowing you to specify 
 Bounded `TypeVar` ensures that the generic type adheres to a specific interface or base class, enabling more precise type checking and preventing misuse.
 
  
-
- #### Generic Type Example: A Reusable Container
+# Generic Type Example: A Reusable Container
 
 ```python
-from typing import Generic, TypeVar, List
+from typing import Generic, TypeVar
 
-# 1. Define a generic type placeholder 'T'
 T = TypeVar('T')
 
 class Container(Generic[T]):
-    """A type-safe container that works with any data type."""
+    """A type-safe container that works with any type."""
+    def __init__(self, content: T):
+        self.content = content
     
-    def __init__(self, value: T):
-        self.value = value
-    
-    def get_value(self) -> T:
-        """Retrieves the stored value with correct type."""
-        return self.value
+    def get(self) -> T:
+        return self.content
+```
 
-# 2. Generic function example
-def get_first(items: List[T]) -> T:
-    """Returns the first item from a list while preserving its type."""
-    return items[0]
+## Key Features
+- **Type Safety**: The container preserves the type of its contents
+- **Reusability**: Works with `int`, `str`, or any other type
+- **Static Checking**: Tools like `mypy` will catch type errors
+
+## Usage
+```python
+# Stores an integer
+int_box: Container[int] = Container(42)
+value = int_box.get()  # Type checker knows this is int
+
+# Stores a string
+str_box: Container[str] = Container("Hello")
+value = str_box.get()  # Type checker knows this is str
+```
+
+ ---
+
+ ### 7. Context Managers
+
+Context managers in Python are used to manage resources such as file streams, network connections, and locks in a clean and safe way. They ensure that resources are properly acquired and released, even in the case of errors. The most common way to use context managers is via the `with` statement.
+
+#### Class-based Implementation
+
+A class can be turned into a context manager by implementing two special methods: `__enter__()` and `__exit__()`.
+
+```python
+import time
+
+class Timer:
+    def __enter__(self):
+        self.start = time.time()
+        print("Timer started.")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.end = time.time()
+        self.interval = self.end - self.start
+        print(f"Timer ended. Duration: {self.interval:.4f} seconds")
+```
+
+Usage:
+
+```python
+with Timer() as t:
+    # some time-consuming operations
+    time.sleep(2)
+```
+
+#### Decorator-based Implementation
+
+Python also provides a more concise way to write context managers using the `@contextmanager` decorator from the `contextlib` module.
+
+```python
+from contextlib import contextmanager
+import tempfile
+import shutil
+import os
+
+@contextmanager
+def temp_directory():
+    path = tempfile.mkdtemp()
+    print(f"Created temporary directory at {path}")
+    try:
+        yield path
+    finally:
+        shutil.rmtree(path)
+        print(f"Deleted temporary directory at {path}")
+```
+
+Usage:
+
+```python
+with temp_directory() as tmp_dir:
+    print(f"Working inside: {tmp_dir}")
+    # do something in the temp dir
+```
+
+#### Key Benefits
+
+- **Resource Safety**: Ensures deterministic release of resources.
+- **Error Handling**: Always executes cleanup code, even when exceptions are raised.
+- **Code Readability**: Isolates setup and teardown code from business logic.
+- **Composable**: Supports nested and multiple context managers.
 
 ---

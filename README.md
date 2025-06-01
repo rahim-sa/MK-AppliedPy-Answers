@@ -567,3 +567,50 @@ with temp_directory() as tmp_dir:
 - **Composable**: Supports nested and multiple context managers.
 
 ---
+
+### 8. Pytest Parameterize
+
+`pytest.mark.parametrize` is a feature of `pytest` that allows running a test function multiple times with different input arguments. This is useful for testing multiple cases without duplicating test code.
+
+#### Basic Example
+
+```python
+import pytest
+
+def square(x):
+    return x * x
+
+@pytest.mark.parametrize("input,expected", [
+    (2, 4),
+    (3, 9),
+    (4, 16),
+    pytest.param(-1, 1, marks=pytest.mark.xfail),
+])
+def test_square(input, expected):
+    assert square(input) == expected
+```
+
+#### Advanced Features
+
+- **Multiple Parameters**: You can pass multiple parameters to test combinations.
+- **Complex Types**: Supports tuples, dictionaries, and even custom objects.
+- **Marks**: Add `xfail`, `skip`, or custom markers per case.
+- **Custom IDs**: Improve readability with `ids` argument.
+
+```python
+@pytest.mark.parametrize(
+    "x,y,result", 
+    [(1, 2, 3), (4, 5, 9), (0, 0, 0)],
+    ids=["small", "medium", "zero"]
+)
+def test_add(x, y, result):
+    assert x + y == result
+```
+
+#### Limitations
+
+- **Readability**: With many combinations, test code may become less readable.
+- **Complex Scenarios**: For highly dynamic inputs, consider using `pytest_generate_tests` hook.
+- **Fixture Interaction**: If combining with fixtures, you must manage scope and dependencies carefully.
+
+---

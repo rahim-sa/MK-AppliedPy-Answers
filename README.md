@@ -614,3 +614,107 @@ def test_add(x, y, result):
 - **Fixture Interaction**: If combining with fixtures, you must manage scope and dependencies carefully.
 
 ---
+
+
+### 9. Python Descriptors
+
+Descriptors are a powerful Python feature that lets you manage the access (get/set/delete) of an attribute. A descriptor is any object that implements any of the descriptor methods: `__get__`, `__set__`, and `__delete__`.
+
+#### Creating a Descriptor
+
+```python
+class PositiveNumber:
+    def __set_name__(self, owner, name):
+        self.name = "_" + name
+
+    def __get__(self, instance, owner):
+        return getattr(instance, self.name)
+
+    def __set__(self, instance, value):
+        if value < 0:
+            raise ValueError("Value must be positive")
+        setattr(instance, self.name, value)
+```
+
+Usage:
+
+```python
+class Account:
+    balance = PositiveNumber()
+
+    def __init__(self, balance):
+        self.balance = balance
+```
+
+#### Descriptor Protocol
+
+- `__get__(self, instance, owner)`: Retrieve attribute value.
+- `__set__(self, instance, value)`: Set attribute value with validation.
+- `__delete__(self, instance)`: Delete the attribute (rare).
+- `__set_name__(self, owner, name)`: Receives the name of the attribute it manages.
+
+#### Use Cases
+
+- **Data Validation**: Validate values when setting attributes.
+- **Computed Properties**: Create dynamic values.
+- **ORM Fields**: Used heavily in Django/SQLAlchemy for model fields.
+- **Shared Behavior**: Encapsulate logic for multiple attributes.
+
+---
+
+### 10. Mock Objects Deep Dive
+
+Mocking is essential in unit testing to isolate the part of the code being tested from its dependencies. Python provides powerful mocking tools in the `unittest.mock` module.
+
+#### Types of Mocks
+
+- **Mock**: General-purpose mock object.
+- **MagicMock**: Subclass of `Mock` with default implementations for magic methods (`__len__`, `__getitem__`, etc.).
+- **AsyncMock**: For mocking asynchronous functions.
+
+#### Example
+
+```python
+from unittest.mock import Mock, patch
+
+def get_api_data():
+    import requests
+    response = requests.get("https://api.example.com/data")
+    return response.json()
+
+def test_api_call():
+    mock_response = Mock()
+    mock_response.json.return_value = {"status": "success"}
+    mock_response.status_code = 200
+
+    with patch("requests.get", return_value=mock_response):
+        result = get_api_data()
+        assert result["status"] == "success"
+```
+
+#### Side Effects
+
+You can use `side_effect` to raise exceptions or return different values on each call:
+
+```python
+mock = Mock()
+mock.side_effect = [Exception("Error!"), "success"]
+```
+
+#### Assertions
+
+- `mock.assert_called_once_with(args)`: Check if the mock was called once with the given arguments.
+- `mock.assert_called()`: Check if it was called at all.
+- `mock.call_args`: View the arguments it was called with.
+
+#### Best Practices
+
+- **Patch Where Used**: Always patch the object in the namespace where it is looked up, not where it's defined.
+- **Use Context Manager**: Prefer `with patch()` to ensure mocks are removed after use.
+- **Keep It Focused**: Only mock what’s necessary to avoid over-mocking and hiding bugs.
+
+```python
+with patch("module.ClassName") as MockClass:
+    instance = MockClass.return_value
+    instance.method.return_value = "mocked"
+```

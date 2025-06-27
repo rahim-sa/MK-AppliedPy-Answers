@@ -390,11 +390,11 @@ The reverse process (deserialization) converts a JSON string back into a usable 
 
 #### Why is JSON Serialization Used?
 
-    Data Exchange – JSON is a lightweight, text-based format used in APIs (REST, GraphQL) and web services.
+- Data Exchange – JSON is a lightweight, text-based format used in APIs (REST, GraphQL) and web services.
 
-    Storage – Serialized JSON can be saved in databases or files.
+- Storage – Serialized JSON can be saved in databases or files.
 
-    Cross-Language Compatibility – Almost all programming languages support JSON parsing.
+- Cross-Language Compatibility – Almost all programming languages support JSON parsing.
 
 ### Handling Custom Object Serialization
 

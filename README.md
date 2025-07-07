@@ -19,25 +19,25 @@ Dataclasses (@dataclass) simplify class creation by auto-generating boilerplate 
     
 Dataclasses, introduced in Python 3.7, simplify class creation by automatically generating special methods like `__init__()`, `__repr__()`, and `__eq__()`. They are particularly useful for classes that primarily store data.
 
-### `frozen` and `slots` Parameters
+#### `frozen` and `slots` Parameters
 
 - **`frozen=True`**: Makes instances immutable by preventing modification of fields after creation. This is beneficial for creating hashable objects and ensuring data integrity.
 
 - **`slots=True`**: Reduces memory usage by preventing the creation of `__dict__` for each instance, leading to faster attribute access and lower memory footprint. :contentReference[oaicite:0]{index=0}
 
-### Memory Efficiency Comparison
+#### Memory Efficiency Comparison
 
 Using `slots=True` can significantly reduce memory usage, especially when creating many instances of a class. It eliminates the per-instance `__dict__`, which can be substantial in large-scale applications.
 
-### Immutability Benefits
+#### Immutability Benefits
 
 Immutable objects (`frozen=True`) are thread-safe and can be used as dictionary keys or set elements. They help prevent accidental modifications, leading to more predictable and bug-resistant code.
 
-### Inheritance Behavior
+#### Inheritance Behavior
 
 When using `slots=True`, subclasses must also define `__slots__` if they introduce new attributes. Otherwise, the benefits of `slots` are lost in the subclass.
 
-### Performance Considerations
+#### Performance Considerations
 
 - **Initialization**: Dataclasses provide faster and cleaner initialization compared to manually writing `__init__` methods.
 
@@ -55,7 +55,7 @@ When using `slots=True`, subclasses must also define `__slots__` if they introdu
    - Inheritance complexities (dataclasses have strict rules).
 
  
- ### Performance Comparison
+ #### Performance Comparison
 
 | Approach                | Memory Usage | Attribute Access Speed | Mutability  |
 |-------------------------|--------------|------------------------|-------------|
@@ -95,7 +95,7 @@ When using `slots=True`, subclasses must also define `__slots__` if they introdu
 
 - **`@classmethod`**: Receives the class (`cls`) as the first argument and can access or modify class state. It is often used for factory methods that instantiate the class in different ways. :contentReference[oaicite:1]{index=1}
 
-### Key Differences
+#### Key Differences
 
 | Feature               | `@staticmethod`                          | `@classmethod`                           |
 |-----------------------|------------------------------------------|------------------------------------------|
@@ -106,24 +106,24 @@ When using `slots=True`, subclasses must also define `__slots__` if they introdu
 | **Callable On**       | Class or instance (`Math.add()` or `m.add()`) | Class only (`Math.factory()`)           |
 
 
-### Method Access Patterns
+#### Method Access Patterns
 
 - **Static Method**: Called on the class or instance without any reference to the class or instance itself.
 
 - **Class Method**: Called on the class or instance, with the class passed as the first argument.
 
-### Inheritance Behavior
+#### Inheritance Behavior
 
 Class methods are polymorphic and respect inheritance hierarchies, meaning they can be overridden by subclasses. Static methods do not have this behavior since they do not receive any reference to the class.
 
 #### Why Use Static & Class Methods?
-### Use Cases
+#### Use Cases
 
 - **Static Methods**: Utility functions related to the class but not dependent on class or instance state.
 
 - **Class Methods**: Alternative constructors or methods that need to access or modify class-level data.
 
-### Design Implications
+#### Design Implications
 
 Choosing between static and class methods depends on whether the method needs to interact with class state. Using the appropriate decorator enhances code clarity and maintainability.
 
